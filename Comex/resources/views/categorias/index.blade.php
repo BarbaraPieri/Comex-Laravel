@@ -4,7 +4,7 @@
 
    <ul class="List-group">
         @foreach ($categorias as $categoria)
-            <li class="List-group-item">{{ $categoria }}</li>
+            <li class="List-group-item">{{ $categoria->nome }}</li>
             @endforeach
     </ul>
     </x-layout>
