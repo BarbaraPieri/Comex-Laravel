@@ -9,11 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class CategoriasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categorias = Categoria::all();
+        $categorias = Categoria::query()->orderBy('nome')->get();
+        $mensagemSucesso = session('mensagem.sucesso');
 
-        return view('categorias.index')->with('categorias', $categorias);
+
+        return view('categorias.index')->with('categorias', $categorias)
+            ->with('mensagemSucesso', $mensagemSucesso);
     }
 
     public function create()
@@ -23,15 +26,20 @@ class CategoriasController extends Controller
 
     public function store(Request $request)
     {
-            $nomeCategoria = $request->input('nome');
-            $categoria = new Categoria();
-            $categoria->nome = $nomeCategoria;
-            $categoria->save();
+            Categoria::create($request->all());
+            $request->session()->flash('mensagem.sucesso', 'Categoria adicionada com sucesso.');
 
-            return redirect('/categorias');
+            return to_route('categorias.index');
+    }
+
+
+    public function destroy(Request $request)
+    {
+       Categoria::destroy($request->categoria);
+       $request->session()->flash('mensagem.sucesso', 'Categoria removida com sucesso');
+
+       return to_route('categorias.index');
     }
 }
-
-
 
 

@@ -1,5 +1,5 @@
 <x-layout title="Nova Categoria">
-    <form action="/categorias/salvar" method="post">
+    <form action="{{route('categorias.store')}}" method="post">
         @csrf
         <div class="mb-3">
         <label for="nome" class="form-Label">Nome:</label>
