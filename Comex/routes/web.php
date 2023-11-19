@@ -18,3 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('/categorias', [CategoriasController::class, 'index']);
+Route::get('/categorias/criar', [CategoriasController::class, 'create']);

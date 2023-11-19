@@ -22,4 +22,9 @@ class CategoriasController extends Controller
 
         return view('categorias.index')->with('categorias', $categorias);
     }
+
+    public function create()
+    {
+        return view('categorias.create');
+    }
 }

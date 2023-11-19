@@ -1,8 +1,10 @@
 
    <x-layout title="Categorias">
-   <ul>
+    <a href="/categorias/criar" class="btn btn-dark mb-2">Adicionar</a>
+
+   <ul class="List-group">
         @foreach ($categorias as $categoria)
-            <li>{{ $categoria }}</li>
+            <li class="List-group-item">{{ $categoria }}</li>
             @endforeach
     </ul>
     </x-layout>
