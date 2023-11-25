@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\ProdutosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,17 @@ Route::get('/', function () {
     return redirect('/categorias');
 });
 
-Route::resource('/categorias', CategoriasController::class)
-  ->except(['show']);
+Route::resource('/categorias', CategoriasController::class);
+Route::get('/produtos/{categoria}', [ProdutosController::class, 'index'])->name('produtos.index');
+Route::get('/produtos/create/{categoria}', [ProdutosController::class, 'create'])->name('produtos.create');
+Route::post('/produtos', [ProdutosController::class, 'store'])->name('produtos.store');
+
+
+// Rota para exibir o formulário de edição
+Route::get('/produtos/{produto}/edit', [ProdutosController::class, 'edit'])->name('produtos.edit');
+
+// Rota para atualizar o produto
+Route::put('/produtos/{produto}', [ProdutosController::class, 'update'])->name('produtos.update');
+Route::delete('/produtos/{produto}', [ProdutosController::class, 'destroy'])->name('produtos.destroy');
+
 

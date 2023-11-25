@@ -14,5 +14,5 @@
                     @isset($nome) value="{{ $nome }}"@endisset>
         </div>
 
-        <button type="submit" class="btn- btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
     </form>

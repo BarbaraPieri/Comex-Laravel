@@ -6,13 +6,15 @@ use App\Http\Requests\CategoriasFormRequest;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Produto;
+
 
 
 class CategoriasController extends Controller
 {
     public function index(Request $request)
     {
-        $categorias = Categoria::query()->orderBy('nome')->get();
+        $categorias = Categoria::all();
         $mensagemSucesso = session('mensagem.sucesso');
 
 
@@ -22,17 +24,34 @@ class CategoriasController extends Controller
 
     public function create()
     {
-        return view('categorias.create');
+        $categorias = Categoria::all();
+        return view('categorias.create', compact('categorias'));
     }
 
-    public function store(CategoriasFormRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'nome' => 'required|min:2',
+        ], [
+            'nome.required' => 'O campo nome é obrigatório.',
+            'nome.min' => 'O campo nome deve ter pelo menos 2 caracteres.',
+        ]);
+
+        try {
             $categoria = Categoria::create($request->all());
 
-            return to_route('categorias.index')
-                ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' ' adicionada com sucesso.");
-    }
+            return redirect()->route('categorias.index')
+                ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' criada com sucesso.");
+        } catch (\Exception $e) {
+            if ($e instanceof \Illuminate\Database\QueryException) {
+                return redirect()->back()
+                    ->withInput($request->all())
+                    ->withErrors(['nome' => 'Erro ao criar a categoria. Certifique-se de fornecer um nome válido.']);
+            }
 
+            throw $e;
+        }
+    }
 
     public function destroy(Categoria $categoria)
     {
@@ -44,7 +63,7 @@ class CategoriasController extends Controller
 
     public function edit(Categoria $categoria)
     {
-        return view('categorias.edit')->with('categoria', $categoria);
+            return view('categorias.edit')->with('categoria', $categoria);
     }
 
     public function update(Categoria $categoria, CategoriasFormRequest $request)
@@ -55,6 +74,8 @@ class CategoriasController extends Controller
         return to_route('categorias.index')
             ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' atualizada com sucesso.");
     }
+
+
 }
 
 
