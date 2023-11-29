@@ -2,81 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoriasFormRequest;
-use App\Models\Categoria;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Produto;
-
-
+use App\Http\Requests\CategoriasFormRequest;
+use App\Repositories\CategoriasRepositoryInterface;
 
 class CategoriasController extends Controller
 {
-    public function index(Request $request)
+    private $categoriasRepository;
+
+    public function __construct(CategoriasRepositoryInterface $categoriasRepository)
     {
-        $categorias = Categoria::all();
-        $mensagemSucesso = session('mensagem.sucesso');
+        $this->categoriasRepository = $categoriasRepository;
+    }
 
+    public function index()
+    {
+        $categorias = $this->categoriasRepository->listarCategorias();
+        return view('categorias.index', compact('categorias'));
+    }
 
-        return view('categorias.index')->with('categorias', $categorias)
-            ->with('mensagemSucesso', $mensagemSucesso);
+    public function store(CategoriasFormRequest $request)
+    {
+        $dados = $request->only('nome');
+        $this->categoriasRepository->criarCategorias($dados);
+        session()->flash('success', "Categoria '$dados[nome]' criada com sucesso");
+
+        return redirect()->route('categorias.index');
     }
 
     public function create()
     {
-        $categorias = Categoria::all();
-        return view('categorias.create', compact('categorias'));
+        return view('categorias.create');
     }
 
-    public function store(Request $request)
+    public function edit($id)
     {
-        $request->validate([
-            'nome' => 'required|min:2',
-        ], [
-            'nome.required' => 'O campo nome é obrigatório.',
-            'nome.min' => 'O campo nome deve ter pelo menos 2 caracteres.',
-        ]);
+        $categoria = $this->categoriasRepository->findCategorias($id);
 
-        try {
-            $categoria = Categoria::create($request->all());
-
-            return redirect()->route('categorias.index')
-                ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' criada com sucesso.");
-        } catch (\Exception $e) {
-            if ($e instanceof \Illuminate\Database\QueryException) {
-                return redirect()->back()
-                    ->withInput($request->all())
-                    ->withErrors(['nome' => 'Erro ao criar a categoria. Certifique-se de fornecer um nome válido.']);
-            }
-
-            throw $e;
-        }
+        return view('categorias.edit', compact('categoria'));
     }
 
-    public function destroy(Categoria $categoria)
+    public function update(Request $request, $id)
     {
-       $categoria->DELETE();
+        $dados = $request->only('nome');
+    $categoria = $this->categoriasRepository->findCategorias($id);
 
-       return to_route('categorias.index')
-       ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' removida com sucesso.");
+    if (!$categoria) {
+        // Trate o caso em que a categoria não foi encontrada
+        return redirect()->route('categorias.index')->with('error', 'Categoria não encontrada');
     }
 
-    public function edit(Categoria $categoria)
+    $nomeAntigo = $categoria->nome;
+
+    $this->categoriasRepository->updateCategoria($id, $dados);
+
+    // Mensagem de sucesso com o nome da categoria
+    session()->flash('success', "Categoria '$nomeAntigo' atualizada com sucesso");
+
+    return redirect()->route('categorias.index');
+    }
+
+    public function destroy($id)
     {
-            return view('categorias.edit')->with('categoria', $categoria);
+        $categoria = $this->categoriasRepository->findCategorias($id);
+
+    if (!$categoria) {
+        // Trate o caso em que a categoria não foi encontrada
+        return redirect()->route('categorias.index')->with('error', 'Categoria não encontrada');
     }
 
-    public function update(Categoria $categoria, CategoriasFormRequest $request)
-    {
-        $categoria->fill($request->all());
-        $categoria->save();
+    $nomeCategoria = $categoria->nome;
 
-        return to_route('categorias.index')
-            ->with('mensagem.sucesso', "Categoria '{$categoria->nome}' atualizada com sucesso.");
+    $this->categoriasRepository->destroyCategoria($id);
+
+    // Mensagem de sucesso com o nome da categoria
+    session()->flash('success', "Categoria '$nomeCategoria' excluída com sucesso");
+
+    return redirect()->route('categorias.index');
     }
-
-
 }
-
-
-

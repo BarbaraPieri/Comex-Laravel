@@ -1,11 +1,19 @@
+{{-- resources/views/categorias/index.blade.php --}}
+
 <x-layout title="Categorias">
     <a href="{{ route('categorias.create') }}" class="btn btn-dark mb-2">Adicionar</a>
 
-    @isset($mensagemSucesso)
+    @if(session('success'))
         <div class="alert alert-success rounded">
-            {{ $mensagemSucesso }}
+            {{ session('success') }}
         </div>
-    @endisset
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger rounded">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <ul class="list-group">
         @foreach ($categorias as $categoria)

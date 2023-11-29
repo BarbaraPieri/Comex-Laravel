@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Produto;
 
 class Categoria extends Model
 {
     use HasFactory;
+
     protected $fillable = ['nome'];
     protected $with = ['produtos'];
 
@@ -19,8 +21,8 @@ class Categoria extends Model
 
     protected static function booted()
     {
-        self::addGlobalScope('ordered', function (Builder $querryBuilder) {
-            $querryBuilder->orderBy('nome');
+        self::addGlobalScope('ordered', function (Builder $queryBuilder) {
+            $queryBuilder->orderBy('nome');
         });
     }
 }

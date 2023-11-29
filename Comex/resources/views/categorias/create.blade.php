@@ -12,6 +12,7 @@
             <div class="col-12">
                 <label for="nome" class="form-label">Nome:</label>
                 <input type="text" autofocus name="nome" class="form-control">
+
             </div>
         </div>
 
