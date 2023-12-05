@@ -28,6 +28,6 @@ class UsersController
 
         $token = $user->createToken('token-name')->plainTextToken;
 
-        return redirect()->route('categorias.index');
+        return redirect()->route('login');
     }
 }
