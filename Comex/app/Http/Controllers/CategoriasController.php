@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoriasFormRequest;
 use App\Repositories\CategoriasRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriasController extends Controller
 {
@@ -17,7 +19,7 @@ class CategoriasController extends Controller
 
     public function index()
     {
-        $categorias = $this->categoriasRepository->listarCategorias();
+         $categorias = $this->categoriasRepository->listarCategorias();
         return view('categorias.index', compact('categorias'));
     }
 

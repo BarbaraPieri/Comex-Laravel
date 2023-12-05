@@ -3,6 +3,8 @@ use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ProdutosController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +19,7 @@ use App\Http\Controllers\ClientesController;
 
 Route::get('/', function () {
     return redirect('/categorias');
-});
+})->middleware(App\Http\Middleware\Autenticador::class);
 
 Route::resource('/categorias', CategoriasController::class);
 Route::get('/categorias/create', [CategoriasController::class, 'create'])->name('categorias.create');
@@ -37,3 +39,11 @@ Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.s
 Route::get('/clientes/{cliente}/edit', [ClientesController::class, 'edit'])->name('clientes.edit');
 Route::put('/clientes/{cliente}', [ClientesController::class, 'update'])->name('clientes.update');
 Route::delete('/clientes/{cliente}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
+
+//Rota  para login:
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'store'])->name('signin');
+
+//Rota para usuários:
+Route::get('/register', [UsersController::class, 'create'])->name('users.create');
+Route::post('/register', [UsersController::class, 'store'])->name('users.store');
