@@ -18,6 +18,6 @@ class LoginController
             return redirect()->back()->withErrors(['Usuário ou senha inválidos.']);
         }
 
-        return to_route('categorias.index');
+        return to_route('dashboard.index');
     }
 }

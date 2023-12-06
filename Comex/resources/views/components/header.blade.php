@@ -1,4 +1,4 @@
-<div class="header container mt-3 mb-3">
+<div class="header container mt-2 mb-3">
     <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
         @auth
             <!-- Exibir conteúdo para usuário logado -->

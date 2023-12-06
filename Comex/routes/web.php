@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,3 +54,5 @@ Route::post('/register', [UsersController::class, 'store'])->name('users.store')
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');

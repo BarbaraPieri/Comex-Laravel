@@ -23,13 +23,25 @@
                 <input type="password" name="password" id="password" class="form-control">
             </div>
 
-            <button class="btn btn-primary mt-3">
-                Entrar
-            </button>
+            <div class="row mb-1">
+                <div class="col">
+                    <button class="btn btn-primary mt-3">
+                        Entrar
+                    </button>
+                </div>
 
-            <a href="{{ route('users.create')}}" class="btn btn-secondary mt-3">
-                Registrar
-            </a>
+                <div class="col">
+                    <a href="{{ route('users.create')}}" class="btn btn-secondary mt-3">
+                        Registrar
+                    </a>
+                </div>
+
+                <div class="col-md-2 offset-md-7 text-right">
+                    <a href="{{ route('categorias.index') }}" class="btn btn-info mt-3">
+                        Lista de Categorias
+                    </a>
+                </div>
+            </div>
         </form>
     </div>
 </body>

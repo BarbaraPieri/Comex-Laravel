@@ -2,7 +2,16 @@
 
 @section('content')
     <x-layout title="Categorias">
-        <a href="{{ route('categorias.create') }}" class="btn btn-dark mb-2">Adicionar</a>
+        @auth
+            <div class="row mb-2">
+                <div class="col">
+                    <a href="{{ route('categorias.create') }}" class="btn btn-dark">Adicionar</a>
+                </div>
+                <div class="col text-end">
+                    <a href="{{ route('dashboard.index') }}" class="btn btn-warning">Voltar para o Dashboard</a>
+                </div>
+            </div>
+        @endauth
 
         @if(session('success'))
             <div class="alert alert-success rounded">
@@ -24,17 +33,19 @@
                     </a>
 
                     <span class="d-flex">
-                        <a href="{{ route('categorias.edit', $categoria->id) }}" class="btn btn-primary btn-sm">
-                            E
-                        </a>
+                        @auth
+                            <a href="{{ route('categorias.edit', $categoria->id) }}" class="btn btn-primary btn-sm">
+                                E
+                            </a>
 
-                        <form action="{{ route('categorias.destroy', $categoria->id) }}" method="post" class="ms-2">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm">
-                                X
-                            </button>
-                        </form>
+                            <form action="{{ route('categorias.destroy', $categoria->id) }}" method="post" class="ms-2">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">
+                                    X
+                                </button>
+                            </form>
+                        @endauth
                     </span>
                 </li>
             @endforeach
